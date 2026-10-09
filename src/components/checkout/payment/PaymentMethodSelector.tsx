@@ -22,10 +22,6 @@ export function PaymentMethodSelector({
   isSubmitting = false,
   paymentMethods,
 }: PaymentMethodSelectorProps) {
-  if (!paymentMethods || paymentMethods.length === 0) {
-    return null;
-  }
-
   const getIcon = (iconName: string | undefined) => {
     switch (iconName) {
       case "credit-card":
@@ -46,7 +42,7 @@ export function PaymentMethodSelector({
   // Set default payment method on component mount, but only once
   React.useEffect(() => {
     // Only set default if no value is currently set and we have payment methods
-    if (paymentMethods.length > 0 && !form.getValues("paymentMethodId")) {
+    if (paymentMethods?.length > 0 && !form.getValues("paymentMethodId")) {
       console.log("Setting default payment method:", paymentMethods[0].id);
       form.setValue("paymentMethodId", paymentMethods[0].id, {
         shouldValidate: true,
@@ -55,6 +51,10 @@ export function PaymentMethodSelector({
     // Remove form from dependency array to prevent infinite loop
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentMethods]);
+
+  if (!paymentMethods || paymentMethods.length === 0) {
+    return null;
+  }
 
   return (
     <div className="space-y-4">
